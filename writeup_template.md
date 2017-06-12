@@ -1,5 +1,4 @@
 ## Project: Search and Sample Return
-### Writeup Template: You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
 
 ---
 
@@ -22,9 +21,15 @@
 
 [//]: # (Image References)
 
-[image1]: ./misc/rover_image.jpg
+[image1]: ./misc/rover_image.jpg?raw=true
 [image2]: ./calibration_images/example_grid1.jpg
 [image3]: ./calibration_images/example_rock1.jpg 
+[Example_grid figure]: ./report_folder/example_grid.png
+[Example_rock figure]: ./report_folder/example_grid.png
+[Perspective transform]: ./report_folder/perspect_trans_color.png
+[Color Thresholding]: ./report_folder/color_thresh.png
+[Coordinate]: ./report_folder/Coordinate_transformations.png 
+[Processing stored images]: ./report_folder/process_image.png
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/916/view) Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -60,27 +65,26 @@ I will skip the test data part since it is similar to my own data resuls. But I 
 
 Exaple figures for caliberating:
 
-[Example_grid figure]: (./report_folders/grid_grid.jpg)
-[Example_rock figure]: ./report_folders/rock_grid.jpg
+![Example grid figure][Example_grid figure]
 
 ##### 2. Perspective Transform Results 
 
 Here are the perspective transform results of the recorded data. The sencond figure is obtained by transforming a whole white figure with the same size as captured figure. The purpose of the second figure is to cancel out the 'out of sight' part for obstacle identification in the color_thresh function.
 
-[Perspective transform results on recorded data]: ./report_folders/perspect_trans_color.png
+![Perspective transform results][Perspective transform]
 
 ##### 3. Color Thresholding Results
 
 The color thresholding resuts are shown below. Here we can see the figures ditinguished obstacle and navigable lands in a clear way. The figure on bottom left is all black since there was no rock in the original figure. The obstacle figure was captured using the same threshold values as navigable one, just in the opposite direction. And the 'out of sight' part obtained in the perspective transform function were all set to 'nonobstacle' after it.
 
-[Color Thresholding Results of recorded data]: ./report_folders/color_thresh.png
+![Color Thresholding results][Color Thresholding]
 
 ##### 4. Coordinate Transformations results
 
 A sample coordinate transformations result is shown below, during which rotate_pix and translate_pix functions are modified.
 In the translate_pix function I used np.rint function instead of np.int so that it could handle array data, which helped getting rid of loop functons.
 
-[Coordinate Transformations results of recorded data]: ./report_folders/Coordinate_transformations.png
+![Coordinate Transformations results of recorded data][Coordinate]
 
 ##### 5. Processing stored images
 
@@ -88,22 +92,71 @@ Here shows the image processing function resuts. This function uses Perspective 
 
 Similar to the previous part, here I used np.rint to eliminate loops. The output image seemed to have 'opposite color' compared to its original one but turned out to be fine in the final videos. Not sure why that was happening.
 
-[Coordinate Transformations results of recorded data]: ./report_folders/process_image.png
+![Processing stored images results][Processing stored images]
  
- Haven't figure out how to embed a video into this file so...
+ I haven't figure out how to embed a video in md file so it is not attached. :p
+ 
 ### Autonomous Navigation and Mapping
 
 #### 1. Fill in the `perception_step()` (at the bottom of the `perception.py` script) and `decision_step()` (in `decision.py`) functions in the autonomous mapping scripts and an explanation is provided in the writeup of how and why these functions were modified as they were.
 
+##### 1. Perception function
+
+The perception function I used was quite alike the one I came out with in the notebook. Aside from small modification such as image sources and putting transform coordinates inside function, the major change I have made is to sets thresholds for the map updating fucntion. 
+Because the perspective transform accuracy is depends on the rover pitch and roll angles, the rover controller should update its map information only when these two parameters are close to zeros (or 360 degrees). Therefore, a conditional statement was made that:
+
+if Rover.pitch and Rover.roll satisfy conditions:
+   update Rover.worldmap
+   
+ It was set to both navigable and obstacle mapping.
+ 
+ Another variable I introduced in the perception function is a rock detection indicator Rover.samples_insight, which tells if there is a rock being detected by the rover in its view. The indicator will be set to 1 if any pix in rover's captured figure is identified as 'rock'.
+ 
+ ##### 2. Decision function
+ 
+ A simple navigating algorithm was applied in the decision function: the rover will follow the mean value of its detected navigable angles most of the time, but there are some small modifications that were made in the decision making process.
+ 
+ ###### 1. Rock detecting and approaching
+ 
+ The rover will stop immediately once its rock detecing indicator is triggered, and turns its driving mode to 'rock'. In this mode, the rover will reduce both its default throttle and maximum speed to their half and trying to locate the rock. The steering angle will be controlled by the detected rock image angles. Once the Rover.near_sample is true, the rover will stop and pick the rock. After picking up one rock, the rover will shift back to 'forward' mode.
+ 
+ ###### 2. Anti-Stuck operation
+ 
+ An counter called Rover.stuck_count is set for the rover to calculate how long it has been trying to move but failed. Once it reaches the preset value, the rover will set its throttle to a negative value, wag the steer and try to back up and get out. It is quite helpful when the rover was driving towards the walls with specifical angles and get stuck on the slopes. But it won't help when rover was caught in the big rocks. 
+ 
+ ###### 3. Shift steer when backing
+ 
+ A small modification: change the steer to its opposite direction when the rover celocity is negative. This will help the rover to turn a little faster when operating the anti-stuck moves.
+ 
+ 
 
 #### 2. Launching in autonomous mode your rover can navigate and map autonomously.  Explain your results and how you might improve them in your writeup.  
 
 **Note: running the simulator with different choices of resolution and graphics quality may produce different results, particularly on different machines!  Make a note of your simulator settings (resolution and graphics quality set on launch) and frames per second (FPS output to terminal by `drive_rover.py`) in your writeup when you submit the project so your reviewer can reproduce your results.**
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+I have run the automous mode simulation severals time. The screen resolution was 1024*768, graphics quality was set to 'good'. The FPS observed during the simulation was around 10 (which was 1 when I using loops in decision and perspective functions).
 
+Sometimes the rover can map  more than 60% of the surface and some times just 30% denpending on the initial facing and location. 
 
+The fidelity highly depends on the threshold I set in the perception function. With the pitch and roll angle thresholds set to 0.2, the rover can always have a fidelity over 60%. The rover can pick up the rock samples almost evey time. 
 
-![alt text][image3]
+One big issue is that the rover is easily get stucked in the 'rock cluster' area in the middle of the map, which is mainly caused by their steering strategy.
+
+To improve the performance of the rover, there are several thoughts:
+
+##### 1. Building a map navigating system
+ 
+ This system will allow rover to read information from its known map and decide its 'large' driving direction, so that it will not revisit the known place and tend to explore the unexplored lands. This process is related to both path searching and plannning, which takes more memory and computing ability.
+
+##### 2. More information of rover
+
+ Often times the rover was stucked between rocks and 'rock clusters' on the ground. Therefore, it might be better if the rover has the following information: height and width of the rover, clearance between ground and its underpan, height of camera and distances betwwen camera and its edges. With these infomation it maybe easir for the rover to decide if it can make it through a slit or run safely over a bunch of gallets.
+ 
+##### 3.Better computing method
+ 
+ In my simulation the fps is about 10, which requires the rover to maintain a slow speed so that it does not have to react fast. If there are some other programing tricks we can play and make that processing speed double, it is possible to have the rover running at a higher speed and efficiency.
+ 
+ That is what came out of my mind for now.
+ Thank you!
 
 
