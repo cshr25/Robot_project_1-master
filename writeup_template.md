@@ -22,9 +22,15 @@
 
 [//]: # (Image References)
 
-[image1]: ./misc/rover_image.jpg
+[image1]: ./misc/rover_image.jpg?raw=true
 [image2]: ./calibration_images/example_grid1.jpg
 [image3]: ./calibration_images/example_rock1.jpg 
+[Example_grid figure]: ./report_folder/example_grid.png
+[Example_rock figure]: ./report_folder/example_grid.png
+[Perspective transform]: ./report_folder/perspect_trans_color.png
+[Color Thresholding]: ./report_folder/color_thresh.png
+[Coordinate]: ./report_folder/Coordinate_transformations.png 
+[Processing stored images]: ./report_folder/process_image.png
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/916/view) Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -60,27 +66,26 @@ I will skip the test data part since it is similar to my own data resuls. But I 
 
 Exaple figures for caliberating:
 
-[Example_grid figure]: (./report_folders/grid_grid.jpg)
-[Example_rock figure]: ./report_folders/rock_grid.jpg
+![Example grid figure][Example_grid figure]
 
 ##### 2. Perspective Transform Results 
 
 Here are the perspective transform results of the recorded data. The sencond figure is obtained by transforming a whole white figure with the same size as captured figure. The purpose of the second figure is to cancel out the 'out of sight' part for obstacle identification in the color_thresh function.
 
-[Perspective transform results on recorded data]: ./report_folders/perspect_trans_color.png
+![Perspective transform results][Perspective transform]
 
 ##### 3. Color Thresholding Results
 
 The color thresholding resuts are shown below. Here we can see the figures ditinguished obstacle and navigable lands in a clear way. The figure on bottom left is all black since there was no rock in the original figure. The obstacle figure was captured using the same threshold values as navigable one, just in the opposite direction. And the 'out of sight' part obtained in the perspective transform function were all set to 'nonobstacle' after it.
 
-[Color Thresholding Results of recorded data]: ./report_folders/color_thresh.png
+![Color Thresholding results][Color Thresholding]
 
 ##### 4. Coordinate Transformations results
 
 A sample coordinate transformations result is shown below, during which rotate_pix and translate_pix functions are modified.
 In the translate_pix function I used np.rint function instead of np.int so that it could handle array data, which helped getting rid of loop functons.
 
-[Coordinate Transformations results of recorded data]: ./report_folders/Coordinate_transformations.png
+![Coordinate Transformations results of recorded data][Coordinate]
 
 ##### 5. Processing stored images
 
@@ -88,7 +93,7 @@ Here shows the image processing function resuts. This function uses Perspective 
 
 Similar to the previous part, here I used np.rint to eliminate loops. The output image seemed to have 'opposite color' compared to its original one but turned out to be fine in the final videos. Not sure why that was happening.
 
-[Coordinate Transformations results of recorded data]: ./report_folders/process_image.png
+![Processing stored images results][Processing stored images]
  
  Haven't figure out how to embed a video into this file so...
 ### Autonomous Navigation and Mapping
