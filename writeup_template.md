@@ -59,7 +59,7 @@ I will skip the test data part since it is similar to my own data resuls. But I 
 ##### 1. Results by notebook on test data
 
 Exaple figures for caliberating:
-[Example_grid figure]: ./report_folders/example_grid.jpg
+[Example_grid figure]: Robot_project_1-master/report_folder/color_thresh.png
 [Example_rock figure]: ./report_folders/rock_grid.jpg
 
 ##### 2. Perspective Transform Results 
