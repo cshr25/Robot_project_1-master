@@ -34,15 +34,33 @@
 
 #### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  
 
-You're reading it!
+Sorry for this late submission, but I was back in China and couldn't get the environment and programing set up for a long time-- at least that is one of the reasons. Here I will demonstrate how I made my approach to this project request and my comments and thought in doing so.
+
+I will briefly talk about my feeling of toughness in each part of the project and go details in the following sections.
+
+#### 2. Image capturing, Calibration Data, Perspective Transform and Color Thresholding
+
+The difficult parts are about understanding the geometry. Actually, in the view of coding, it is uncessary to fully get the idea how the transforms work, whcih makes this part some what easier. What I did was just finding the four reference points of caliberating figures, figuring out what rgb values are for ground, rocks and navigable roads. There are some minor changes to identity the obstacle object in the color thresholding function that I will mention later.
+
+#### 3. Coordinate Transformations and process_image function
+
+Coordinate Transformation is almost the same as what I learnt in the class. I was using for loop to complete imgage coordinate transfer but it turned out to be too slow when doing autonomous driving. Instead I applied rint in translate_pix and process_image functions to get rid of loops.
+
+#### 4. Autonomous driving and decision making
+
+In this part, I was using a simple navigating stratrgy: follow the navigable path with mean steering angle. 
+There are some special conditions set: once a rock is found, the rover will stop and try to find the rock and pick it up first. An anti-stuck setting wad made that the rover will try back up when tried to move forward but got no acceleration. But no map memorying or planing function was designed. The rover will just try to march for the navigable ground ahead.
 
 ### Notebook Analysis
 #### 1. Run the functions provided in the notebook on test images (first with the test data provided, next on data you have recorded). Add/modify functions to allow for color selection of obstacles and rock samples.
-Here is an example of how to include an image in your writeup.
 
-![alt text][image1]
+I will skip the test data part since it is similar to my own data resuls. But I still usded the provided caliberating pictures to generate the perspective transform coordinates. Some of the results of the notebook are shown below.
 
-#### 1. Populate the `process_image()` function with the appropriate analysis steps to map pixels identifying navigable terrain, obstacles and rock samples into a worldmap.  Run `process_image()` on your test data using the `moviepy` functions provided to create video output of your result. 
+##### 1. 
+
+[image1]: ./report folders/example_grid.jpg
+
+#### 2. Populate the `process_image()` function with the appropriate analysis steps to map pixels identifying navigable terrain, obstacles and rock samples into a worldmap.  Run `process_image()` on your test data using the `moviepy` functions provided to create video output of your result. 
 And another! 
 
 ![alt text][image2]
