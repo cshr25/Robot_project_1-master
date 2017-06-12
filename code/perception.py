@@ -191,7 +191,7 @@ def perception_step(Rover):
     walkable=pix_to_world(xpix, ypix, xpos, ypos, yaw, world_size, scale)
     walkable_pix_world = np.rint(np.clip(walkable, 0, world_size - 1))
     walkable_pix_world=walkable_pix_world.astype(int)
-    if (Rover.pitch <0.5 or Rover.pitch >359.5) and (Rover.roll <0.5 or Rover.roll>359.5):
+    if (Rover.pitch <0.3 or Rover.pitch >359.7) and (Rover.roll <0.3 or Rover.roll>359.7):
         Rover.worldmap[walkable_pix_world[1],walkable_pix_world[0],2] += 1
         
 #record in the obstacle pix
@@ -200,7 +200,7 @@ def perception_step(Rover):
     obstacle=pix_to_world(xpix, ypix, xpos, ypos, yaw, world_size, scale)
     obstacle_pix_world = np.rint(np.clip(obstacle, 0, world_size - 1))
     obstacle_pix_world=obstacle_pix_world.astype(int)
-    if (Rover.pitch <0.5 or Rover.pitch >359.5) and (Rover.roll <0.5 or Rover.roll>359.5):
+    if (Rover.pitch <0.3 or Rover.pitch >359.7) and (Rover.roll <0.3 or Rover.roll>359.7):
         Rover.worldmap[obstacle_pix_world[1],obstacle_pix_world[0],0] += 1
           
 #record in the rock pix
