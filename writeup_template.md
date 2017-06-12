@@ -30,6 +30,7 @@
 [Color Thresholding]: ./report_folder/color_thresh.png
 [Coordinate]: ./report_folder/Coordinate_transformations.png 
 [Processing stored images]: ./report_folder/process_image.png
+[good]: ./report_folder/good.png
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/916/view) Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -136,13 +137,17 @@ if Rover.pitch and Rover.roll satisfy conditions:
 
 I have run the automous mode simulation severals time. The screen resolution was 1024*768, graphics quality was set to 'good'. The FPS observed during the simulation was around 10 (which was 1 when I using loops in decision and perspective functions).
 
-Sometimes the rover can map  more than 60% of the surface and some times just 30% denpending on the initial facing and location. 
+Sometimes the rover can map  more than 60% of the surface and some times just 30% denpending on the initial facing and location. And there is a big chance the rover keep circulating in a large open area. I have introduce some random steering in to preventing that but it still occurs.
 
 The fidelity highly depends on the threshold I set in the perception function. With the pitch and roll angle thresholds set to 0.2, the rover can always have a fidelity over 60%. The rover can pick up the rock samples almost evey time. 
 
 One big issue is that the rover is easily get stucked in the 'rock cluster' area in the middle of the map, which is mainly caused by their steering strategy.
+A screen shot of the rover is shown below:
 
-To improve the performance of the rover, there are several thoughts:
+![Rover performance (good one)][good]
+
+
+To improve the performance of the rover, I have come up with several thoughts:
 
 ##### 1. Building a map navigating system
  
