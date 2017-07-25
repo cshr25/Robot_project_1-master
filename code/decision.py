@@ -102,7 +102,7 @@ def decision_step(Rover):
             # anti_block operation       
             if Rover.vel < Rover.max_vel:
                     # count how long we have been in 'slow motion' mode
-                    if Rover.vel < 0.2:
+                    if Rover.vel < 0.5:
                         Rover.stuck_count += 1
                     else:
                         Rover.stuck_count = 0
