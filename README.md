@@ -1,6 +1,8 @@
 ## Project: Search and Sample Return
 
----
+This is my first robot project. It's a small project provided by Udacity robot and machine learning course. The goal of this proejct to set up a simualtion environment for a Mars Rover and develop a navigating strategy for it using its captured image. Our main task to design a navigating logic that could lead the Rover exploring as much land as possible in the given landscape.
+
+The project report is attached below.
 
 
 **The goals / steps of this project are the following:**  
